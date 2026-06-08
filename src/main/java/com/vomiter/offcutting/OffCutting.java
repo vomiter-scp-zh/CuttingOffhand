@@ -3,11 +3,11 @@ package com.vomiter.offcutting;
 import com.mojang.logging.LogUtils;
 import com.vomiter.offcutting.common.event.EventHandler;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
 @Mod(OffCutting.MOD_ID)
@@ -21,11 +21,10 @@ public class OffCutting
         return Helpers.id(OffCutting.MOD_ID, path);
     }
 
-    public OffCutting(FMLJavaModLoadingContext context) {
+    public OffCutting(ModContainer mod, IEventBus modBus) {
         EventHandler.init();
-        IEventBus modBus = context.getModEventBus();
         modBus.addListener(this::commonSetup);
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        mod.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
