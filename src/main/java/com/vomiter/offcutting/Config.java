@@ -5,16 +5,23 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @EventBusSubscriber(modid = OffCutting.MOD_ID)
 public class Config
 {
+    public static int CUTTING_BOARD_INSERT_COUNT = Integer.MAX_VALUE;
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    private static final ModConfigSpec.IntValue CUTTING_BOARD_INSERT_COUNT_VALUE = BUILDER
+            .comment("Maximum number of items inserted into a cutting board per interaction.",
+                    "The actual amount is also limited by the held stack and the cutting board inventory.",
+                    "Use 2147483647 to allow the item's maximum stack size, including changes made by other mods.",
+                    "Use 1 to mimic the cutting board behavior before version 1.3 of Farmer's Delight.")
+            .defineInRange("cuttingBoardInsertCount", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
     static final ModConfigSpec SPEC = BUILDER.build();
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
+        if (event.getConfig().getSpec() != SPEC) return;
+        CUTTING_BOARD_INSERT_COUNT = CUTTING_BOARD_INSERT_COUNT_VALUE.get();
     }
 }
